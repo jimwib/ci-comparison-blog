@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "jimstaak/ci-comparison-blog",
+    "Name": "094046062073.dkr.ecr.us-east-1.amazonaws.com/ci-comparison-blog",
     "Update": "true"
   },
   "Ports": [

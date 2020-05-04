@@ -8,7 +8,7 @@ phases:
       - npm i npm@latest -g
       - pip install --upgrade pip
       - pip install --upgrade awscli
-      - eval $(aws ecr get-login --no-include-email | sed 's|https://||')
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=094046062073.dkr.ecr.us-east-1.amazonaws.com/ci-comparison-blog
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}

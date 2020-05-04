@@ -8,14 +8,19 @@ phases:
       - npm i npm@latest -g
       - pip install --upgrade pip
       - pip install --upgrade awscli
-      - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=094046062073.dkr.ecr.us-east-1.amazonaws.com/ci-comparison-blog
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   pre_build:
     commands:
       - npm install
       - npm test
   build:
     commands:
-      - docker build -t jimstaak/ci-comparison-blog .
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - docker push jimstaak/ci-comparison-blog
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
